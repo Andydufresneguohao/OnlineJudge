@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+//pipioj1028
+
+
+
+struct cola
+{
+    int v,c;
+    double cheap;
+}T[35];
+
+bool cmp(cola a,cola b){
+    return a.cheap<b.cheap;
+}
+
+
+int  main(){
+    ///n是可乐种类，L是需要买毫升的可乐
+    int n,L;
+    while (scanf("%d%d",&n,&L)!=EOF)
+    {
+        for(int i=0;i<n;i++){
+            scanf("%d",&T[i].c);
+            T[i].v = 1<<i;
+            T[i].cheap = 1.0*T[i].c/T[i].v;
+        }
+        sort(T,T+n,cmp);
+        //need是买完性价比最高的后还需要可乐数量
+        int need = L;
+        ///ans1 代表一直往下买性价比更低的饮料
+        ///ans2 代表在ans1的基础上在买一瓶当前性价比最高的饮料，这里面所有情况的最小值
+        long long ans1 = 0,ans2=1e18;
+        for(int i=0;i<n;i++){
+            long long num = need/T[i].v; ///在不超过L的情况下最多可以买num瓶性价比最高的饮料
+            ans1 = num*T[i].c + ans1;
+            need =need%T[i].v;
+            if(need==0)break;
+            ans2 = min(ans1+T[i].c,ans2);
+        }
+        if(need)printf("%lld\n",ans2);
+        else{
+            printf("%lld\n",min(ans1,ans2));
+        }
+    }
+    return 0;
+}
