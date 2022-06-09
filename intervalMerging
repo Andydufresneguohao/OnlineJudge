@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+//pipioj1323
+
+struct village
+{
+    int x;
+    int y;
+}T[100005];
+
+
+
+//设置segment按照l从小到大排序
+bool cmp(village a,village b)
+{
+    return a.x<b.x;
+}
+int main(){
+    int n;
+    int storage[100005][2];
+    while (scanf("%d",&n)!=EOF)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            scanf("%d%d",&T[i].x,&T[i].y);
+        }
+        //按照左端点x进行排序
+        sort(T,T+n,cmp);
+        int rLimit = T[0].y;///新区间的右端点
+        int lLimit = T[0].x;///新区间的左端点
+        int m = 1;///m代表合并后的区间个数
+        //从左端点小到大遍历一次所有区间
+        for(int i=0;i<n;i++){
+            ///新区间可以合并进原来的
+            if(T[i].x<=rLimit){
+                rLimit = max(T[i].y,rLimit);
+            }
+            else{
+                ///将上一次合并的区间记录到storage中
+                storage[m][0] = lLimit;
+                storage[m][1] = rLimit;
+                //更新最新的区间数量已经rLimit和lLimit
+                m++;
+                lLimit = T[i].x;
+                rLimit = T[i].y;
+            }
+        }
+        ///补上最后一个线段的区间
+        storage[m][0] = lLimit;
+        storage[m][1] = rLimit;
+        ////格式化输出结果
+        printf("%d\n",m);
+        for (int i = 1; i <= m; i++){
+            printf("%d %d\n",storage[i][0],storage[i][1]);
+        }
+        
+    }
+    return 0;
+}
