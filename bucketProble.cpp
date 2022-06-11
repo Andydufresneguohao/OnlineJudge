@@ -1,27 +1,22 @@
 #include<bits/stdc++.h>
 using namespace std;
 //pipioj1255
+int stick[100005];///存储棍子
 
 int  main(){
-    int stick[1000500];///存储棍子
     ///n个桶，每个桶由k根棍子组成，两个桶的容量差小于等于L
     int n,k;
     int L;
     ////m表示前m个最短的棍子可以来当最短板
     int m;
+    
     scanf("%d%d%d",&n,&k,&L);
     for (int i = 0; i < n*k; i++)       
     {
         scanf("%d",&stick[i]);
     }
     sort(stick,stick+n*k);
-    for (int i = 0; i < n*k; i++)
-    {
-        if(stick[0]+L<stick[i]){
-            m = i;
-            break;
-        }
-    }
+    m = upper_bound(stick,stick+n*k,stick[0]+L)-stick;
     //printf("test%d\n",m);
     //ans是n个桶子最大容量和
     long long ans = 0;
@@ -59,7 +54,7 @@ int  main(){
         ///每一次循环结束，remian数量应该减少一个
         remain--;
     }
+    ////考虑n=1,即只有一个桶子的情况，上面循环会自然退出
+    printf("%lld\n",ans);
+    return 0;
 }
-
-
-
