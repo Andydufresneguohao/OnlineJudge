@@ -1,54 +1,51 @@
 #include<bits/stdc++.h>
 using namespace std;
-//pipioj1389
-
-struct process
+const int INF=1E9;
+struct node
 {
-    int s,t;
-    bool operator > (const process& tmp) const
-    {
-        if(s == tmp.s)return t>tmp.t;
-        else{
-            return s>tmp.s;
-        }
-    }
-};
-
-priority_queue<process,vector<process>,greater<process>> pq;
-//为什么不能上面这么写？因为大于号没有定义，所以会报错.
-//要用小根堆那么结构体就要重载大于号，以便使用greater
-
-
-int  main(){
-    int n;
-    while (scanf("%d",&n)!=EOF){
-        int answer=0;
-        process input;
-        int a,b;
-        for(int i=0;i<n;i++){
-            scanf("%d%d",&a,&b);
-            input.s = a;
-            input.t = b;
-            pq.push(input);
-        }
-        process now,next;
-        while (pq.size())
-        {
-            now = pq.top();
-            pq.pop();
-            answer++;
-            while (pq.size() && now.s==pq.top().s)
-            {
-                next = pq.top();
-                pq.pop();
-                if(next.s<next.t){
-                    next.s = next.s + 1;
-                    pq.push(next);
-                }
-            }
-        }
-        printf("%d\n",answer);
-    }
-    return 0;
+        int x,y;
+}E[100005];
+bool cmp(node a,node b)
+{
+        if(a.x==b.x)
+                return a.y<b.y;
+        else
+                return a.x<b.x;
 }
-
+int n;
+int main()
+{
+        while(scanf("%d",&n)!=EOF)
+        {
+                int ans = -INF;
+                for(int i=0;i<n;i++)
+                {
+                        int u,v;
+                        scanf("%d%d",&u,&v);
+                        E[i].x=u,E[i].y=v;
+                        ans=max(ans,v);
+                }
+                sort(E,E+n,cmp);
+                priority_queue<int,vector<int>,greater<int> >q;
+                int now =0,pos=0,sum=0;
+                while(now<=ans)
+                {
+                        while(pos<n&&E[pos].x<=now)//use pos record current time
+                        {
+                                q.push(E[pos++].y);
+                        }
+                        while(q.size()) ///if queue not empty
+                        {
+                                int end_time=q.top();
+                                q.pop();
+                                if(end_time<now)
+                                        continue;
+                                sum++;
+                                break;
+                        }
+                        now++;
+                }
+                printf("%d\n",sum);
+        }
+        return 0;
+}
