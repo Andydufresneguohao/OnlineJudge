@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAX = 1e3+5;
+typedef long long ll;
+ll dp[MAX][MAX];
+ll a[MAX];
+
+int main(){
+    int n,q,l,r;
+    scanf("%d %d",&n,&q);
+    for(int i=1;i<=n;i++)scanf("%lld",&a[i]);
+
+    //process
+    for(int i=1;i<=n;i++){
+        dp[i][i]=a[i];
+        for(int j=i+1;j<=n;j++){
+            dp[i][j] = max(dp[i][j-1],a[j]);
+        }
+    }
+
+    for(int i=1;i<=q;i++){
+        scanf("%d%d",&l,&r);
+        printf("%lld\n",dp[l][r]);
+    }
+    return 0;
+}
+
+
+// #  给出n个整数a_1,a_2,...,a_n，回答q个问题，第q个问题给出两个整数l_i,r_i，你需要回答max(a_{l_i},a_{l_i+1},,...,a_{r_i})是多少。
+// 第一行两个整数n,q(1\le n,q\le 1000)。
+// 第二行n个整数a_1,a_2,...,a_n(1\le a_i\le 10^9)。
+// 接下来q行每行两个整数l_i,r_i(1\le l_i\le r_i\le n)。
+// dp[i][j] = max(dp[i][j-1],a[j])
+
+// for(int i=1;i<=n;i++){
+//     dp[i][i]=a[i];
+//     for(int j=i+1;j<=n;j++){
+//         dp[i][j] = max(dp[i][j-1],a[j]);
+//     }
+// }
