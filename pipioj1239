@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int MAX = 1e5+5;
+typedef long long ll;
+//da[0][i]存储原始信息，da[1][i]存储差分数组信息
+int da[2][MAX];
+//存储改动后数据实际状态
+int finalData[MAX];
+//结果前缀和
+ll frontsum[MAX];
+
+
+int main(){
+    int n,m,q;
+    int op,L,R,P,query_l,query_r;
+    scanf("%d %d %d",&n,&m,&q);
+    for(int i=1;i<=n;i++){
+        scanf("%d",&da[0][i]);
+        da[1][i] = da[0][i]-da[0][i-1];
+    }
+    for(int i=1;i<=m;i++){
+        scanf("%d %d %d %d",&op,&L,&R,&P);
+        //add a number P
+        if(op==1){
+            da[1][L]+=P;
+            da[1][R+1]-=P;
+        }
+        //reduce a number P
+        if(op==2){
+            da[1][L]-=P;
+            da[1][R+1]+=P;
+        }
+    }
+    // scanf("%d %d",&query_l,&query_r);
+    for(int i=1;i<=n;i++){
+        finalData[i] = finalData[i-1]+da[1][i];
+    }
+    for(int i=1;i<=n;i++){
+        frontsum[i]= frontsum[i-1] + finalData[i];
+    }
+    for(int i=1;i<=q;i++){
+        scanf("%d %d",&query_l,&query_r);
+        printf("%lld\n",frontsum[query_r]-frontsum[query_l-1]);
+    }
+    
+    return 0;
+}
+
+// 输入第一行包含三个数字 n,m,q (1<=n,m,q<=1e5)。
+// 第二行 n 个数字，代表 a 数组。
+// 第3到第 m+2行每行包括 4 个数字 op L R P, op为 1时执行操作 1，否则执行操作2(P<=1e5).
+// 最后 q 行每行 2 个数字 L，R，代表询问的区间。 
+
+// PIPI现在手里有一个长度为n的序列 a1 a2 ... an。
+// 这个序列支持两种操作:
+// 1. 对区间 L ~ R 增加一个数P
+// 2. 对区间 L ~ R 减去一个数P
+// 现在经过m次这样的操作之后，PIPI再对这个序列进行q次询问~
+// 每次询问区间 a[L]~a[R]的和，你能告诉PIPI每次的询问结果吗? 
