@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+// # 一代赌神亲传弟子赌怪PIPI拥有过人的牌技，而POPO这次给他一个考验。
+// # POPO首先拿出n张牌，牌上的数字为1到n，任意两张牌的数字不会相同。然后POPO把这些牌洗乱堆在一起，其从牌底到牌顶形成了一个数字序列。
+// #之后POPO再次拿出n张1到n且两不相同的牌，再次洗乱堆在一起，形成第二堆牌。PIPI每次可以从第一堆牌的牌顶拿出一张牌，插入第一堆牌的任意位置。
+// # 请问PIPI至少要操作多少次，才能使第一堆牌的序列和第二堆牌一样？ 
+
+// # 第一行一个正整数n，n<=10^6。
+// # 第二行n个正整数，表示第一堆牌从牌底到牌顶的数字序列。
+// # 第三行n个正整数，表示第二堆牌从牌底到牌顶的数字序列。 
+
+const int MAX = 1e6+5;
+int first[MAX];
+int second[MAX];
+int change[MAX];
+
+int main(){
+    int n,ans;
+    scanf("%d",&n);
+    for(int i=0;i<n;i++)scanf("%d",&first[i]);
+    for(int i=0;i<n;i++){
+        scanf("%d",&second[i]);
+        change[second[i]] = i+1;
+    }
+    for(int i=0;i<n;i++)first[i] = change[first[i]];
+    // for(int i=0;i<n;i++)printf("%d ",second[i]);
+    // printf("\n");
+    // for(int i=0;i<n;i++)printf("%d ",first[i]);
+    if(n==1)ans=0;
+    else{
+        int bigest = first[0];
+        int i;
+        for(i=1;i<n;i++){
+            //说明到i到n之间的牌都需要调整（ans = n-i）
+            if(first[i]<bigest)break;
+            bigest = max(first[i],bigest);
+        }
+        ans = n-i; ///因为队列初始下标从0开始的
+    }
+    printf("%d\n",ans);
+    return 0;
+}
+
+
