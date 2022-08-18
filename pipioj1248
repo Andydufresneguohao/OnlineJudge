@@ -1,0 +1,98 @@
+#include<bits/stdc++.h>
+using namespace std;
+//pipioj1389
+
+// struct process
+// {
+//     int s,t;
+//     bool operator > (const process& tmp) const
+//     {
+//         if(t == tmp.t)return s>tmp.s;
+//         else{
+//             return t>tmp.t;
+//         }
+//     }
+// };
+
+// priority_queue<process,vector<process>,greater<process>> pq;
+//为什么不能上面这么写？因为大于号没有定义，所以会报错.
+//要用小根堆那么结构体就要重载大于号，以便使用greater
+
+
+
+const int N = 1e5 + 5;
+int block[N];
+int  main(){
+    int n;
+    int head_block = -1;
+    int rear_block = -1;
+    int have_rear_block;
+    while(scanf("%d",&n)!=EOF){
+        stack<pair<int,int> > stk;
+        for(int i=1;i<=n;i++)scanf("%d",&block[i]);
+        ////1.先找出第一个head_block
+        for(int i=1;i<n;i++){
+            if(block[i]>block[i+1]){
+                head_block = i;
+                break;
+            }
+        }
+        printf("test1\n");
+        ////2.遍历一次，将所有的积水前后板对找出来（(head_block,rear_block)组成一个储水器）
+        have_rear_block = 0;///还没有候选中的后板
+        for(int i=head_block+1;i<=n;i++){
+            if(block[i]>=block[i-1]){
+                rear_block = i; ///后板候选人更新
+                have_rear_block = 1;
+            }
+            if(block[i]<block[i-1] && !have_rear_block){//找到了一个储水器
+                stk.push(make_pair(head_block,rear_block));
+                head_block = i-1;  ///更新前板
+                have_rear_block = 0; ///更新是否有后板状态
+            }
+        }
+        printf("test2\n");
+        pair<int,int> test;
+        while(!stk.empty()){
+            test = stk.top();
+            printf("%d %d\n",test.first,test.second);
+            stk.pop();
+        }
+        printf("test3\n");
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
