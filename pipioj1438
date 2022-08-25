@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+//pipioj1438
+int big[505];
+int small[505];
+int dp[505][505];///在n,m物料条件下，前i个工厂最多可以建立的数量
+
+
+int  main(){
+    int n,m,t;
+    char s[1005];
+    scanf("%d %d %d",&n,&m,&t);
+    for(int i=1;i<=t;i++){
+        scanf("%s",s);
+        for(int j=0;j<strlen(s);j++){
+            if(s[j]=='p'){
+                small[i]++;
+            }
+            else if(s[j]=='P'){
+                big[i]++;
+            }
+        }
+        // printf("%d %d\n",small[i],big[i]);
+    }
+    for(int i=1;i<=t;i++){///最外层遍历所有工厂
+        for(int j=n;j>=big[i];j--){///遍历大P
+            for(int k=m;k>=small[i];k--){///遍历小p
+                dp[j][k] = max(dp[j][k],1+dp[j-big[i]][k-small[i]]);
+            }
+        }
+    }
+    printf("%d\n",dp[n][m]);
+    return 0;
+}
