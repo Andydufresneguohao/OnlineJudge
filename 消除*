@@ -1,0 +1,52 @@
+#include<bits/stdc++.h> 
+using namespace std;
+const int N = 1e3+5;
+char str[N];
+int flag[N];////用于标记*是否是转义后的*，是flag[i]==1 
+
+int main(){
+	int len;
+	stack<char> s;
+	stack<char> p;
+	while(scanf("%s",str+1)!=EOF){
+		len = strlen(str+1);
+		///预处理str,cope with '\'
+		int index = 1;
+		int pre = 0;///标识前一个是否为转义字符
+		for(int i= 1; i<=len;i++){
+			str[index] = str[i];
+			if(pre){
+				if(str[i]=='*'){
+					flag[index] = 1;
+				}
+				pre = 0;
+				index++;
+			}else{
+				if(str[i]=='\\'&&i!=len){
+					pre = 1; 
+				}else{
+					index++;
+				}
+			}	
+		}///for
+		
+		for(int i=1;i<index;i++){
+			if(str[i]=='*'&&!flag[i]){
+				if(!s.empty())s.pop();
+			}else{
+				s.push(str[i]);
+			}
+		}
+		while(!s.empty()){
+			p.push(s.top());
+			s.pop();
+		}
+		while(!p.empty()){
+			printf("%c",p.top());
+			p.pop();
+		}
+		printf("\n");
+		for(int i=0;i<=N;i++)flag[i] = 0;///clear-cut
+
+	}
+}
