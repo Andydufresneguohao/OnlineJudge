@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+struct treeNode{
+	int value;
+	treeNode* lchild;
+	treeNode* rchild;
+	treeNode(){
+		lchild = NULL;
+		rchild = NULL;
+	}
+};
+
+///先序遍历创建树 
+treeNode* preBuild(){
+	int value;
+	scanf("%d",&value);
+	treeNode* root = new treeNode();
+	if(value!=-1){
+		root->value = value;
+		root->lchild = preBuild();
+		root->rchild = preBuild(); 
+	}else{
+		root = NULL;
+	}
+	return root;
+}
+///后序交换左右子树 
+void postorder(treeNode * &root){
+	if(root==NULL)return;
+	postorder(root->lchild);
+	postorder(root->rchild);
+	swap(root->lchild,root->rchild);
+}
+
+///先序遍历
+void preorder(treeNode* root) {
+	if(root==NULL)return;
+	printf("%d ",root->value);
+	preorder(root->lchild);
+	preorder(root->rchild);
+}
+
+int main(){
+	treeNode *rootA = preBuild();
+	postorder(rootA);
+	preorder(rootA);
+//	printf("%d",rootA->lchild->value);
+	return 0;
+}
