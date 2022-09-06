@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+struct treeNode{
+	int value;
+	treeNode* lchild;
+	treeNode* rchild;
+	treeNode(){
+		lchild = NULL;
+		rchild = NULL;
+	}
+};
+
+///先序遍历创建树 
+treeNode* preBuild(){
+	int value;
+	scanf("%d",&value);
+	treeNode* root = new treeNode();
+	if(value!=-1){
+		root->value = value;
+		root->lchild = preBuild();
+		root->rchild = preBuild(); 
+	}else{
+		root = NULL;
+	}
+	return root;
+}
+///中序遍历 
+void inorder(treeNode *root){
+	if(root==NULL)return;
+	inorder(root->lchild);
+	printf("%d ",root->value);
+	inorder(root->rchild);
+}
+
+///判断是否是同构树 
+bool isomorph(treeNode *A,treeNode *B){
+	if(A==NULL&&B==NULL)return true;
+	if((A!=NULL&&B==NULL) || (A==NULL&&B!=NULL) || A->value!=B->value)return false;
+	if(isomorph(A->lchild,B->lchild)&&isomorph(A->rchild,B->rchild))return true;
+	if(isomorph(A->lchild,B->rchild)&&isomorph(A->rchild,B->lchild))return true;
+	return false;
+}
+
+int main(){
+	treeNode *rootA = preBuild();
+	treeNode *rootB = preBuild();
+	if(isomorph(rootA,rootB))printf("YES\n");
+	else printf("NO\n");
+	return 0;
+}
