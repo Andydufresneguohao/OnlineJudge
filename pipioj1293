@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+struct treeNode{
+	int value;
+	treeNode* lchild;
+	treeNode* rchild;
+	treeNode(){
+		lchild = NULL;
+		rchild = NULL;
+	}
+};
+
+///先序遍历创建树 
+treeNode* preBuild(){
+	int value;
+	scanf("%d",&value);
+	treeNode* root = new treeNode();
+	if(value!=-1){
+		root->value = value;
+		root->lchild = preBuild();
+		root->rchild = preBuild(); 
+	}else{
+		root = NULL;
+	}
+	return root;
+}
+
+//judge mirror acclimation
+bool mirror(treeNode* a,treeNode* b){
+	if(a==NULL&&b==NULL)return true;
+	if((a!=NULL&&b==NULL)||(a==NULL&&b!=NULL)||a->value!=b->value)return false;
+	return mirror(a->lchild,b->rchild)&&mirror(a->rchild,b->lchild);
+}
+
+int main(){
+	treeNode *rootA = preBuild();
+	if(rootA==NULL||(rootA->lchild==NULL&&rootA->rchild==NULL))printf("yes\n");
+	else if((rootA->lchild!=NULL&&rootA->rchild==NULL)||(rootA->lchild==NULL&&rootA->rchild!=NULL))printf("no\n");
+	else{
+		if(mirror(rootA->lchild,rootA->rchild))printf("yes\n");
+		else printf("no\n");
+	}
+	return 0;
+}
