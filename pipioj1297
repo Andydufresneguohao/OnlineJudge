@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+struct treeNode{
+	int value;
+	treeNode* lchild;
+	treeNode* rchild;
+	treeNode(){
+		lchild = NULL;
+		rchild = NULL;
+	}
+};
+
+///先序遍历创建树 
+treeNode* preBuild(){
+	int value;
+	scanf("%d",&value);
+	treeNode* root = new treeNode();
+	if(value!=-1){
+		root->value = value;
+		root->lchild = preBuild();
+		root->rchild = preBuild(); 
+	}else{
+		root = NULL;
+	}
+	return root;
+}
+bool whether = false;
+bool noAncestor = false;
+///find all ancestor(from root to dad)
+void find_ancestor(treeNode* root,queue<int>q,int nodeName){
+	if(root==NULL)return;
+	if(root->value == nodeName){
+		whether = true;
+		if(q.empty())noAncestor = true;
+		while(!q.empty()){
+			printf("%d ",q.front());
+			q.pop();
+		}
+		return;
+	}
+	q.push(root->value);
+	find_ancestor(root->lchild,q,nodeName);
+	find_ancestor(root->rchild,q,nodeName);
+}
+
+int main(){
+	int nodeName;
+	queue<int>q;
+	treeNode *rootA = preBuild();
+	scanf("%d",&nodeName);
+	find_ancestor(rootA,q,nodeName);
+	if(whether==false)printf("No Node!\n");
+	if(noAncestor)printf("No Ancestor!\n");
+	return 0;
+}
